@@ -1,0 +1,32 @@
+{
+  "name": "Log::Dispatch",
+  "description": "Multi-source, multi-destination log dispatcher",
+  "version": "0.0.1",
+  "perl": "6.*",
+  "authors": [
+    "Vadim Belman"
+  ],
+  "auth": "<zef:vrurg>",
+  "depends": [
+    "Terminal::ANSI"
+  ],
+  "build-depends": [],
+  "test-depends": [
+    "Test::Output"
+  ],
+  "provides": {
+    "Log::Dispatch": "lib/Log/Dispatch.rakumod",
+    "Log::Dispatch::Destination": "lib/Log/Dispatch/Destination.rakumod",
+    "Log::Dispatch::File": "lib/Log/Dispatch/File.rakumod",
+    "Log::Dispatch::Msg": "lib/Log/Dispatch/Msg.rakumod",
+    "Log::Dispatch::Processor": "lib/Log/Dispatch/Processor.rakumod",
+    "Log::Dispatch::Source": "lib/Log/Dispatch/Source.rakumod",
+    "Log::Dispatch::TTY": "lib/Log/Dispatch/TTY.rakumod",
+    "Log::Dispatch::Types": "lib/Log/Dispatch/Types.rakumod",
+    "Log::Dispatch::X": "lib/Log/Dispatch/X.rakumod"
+  },
+  "resources": [],
+  "license": "Artistic-2.0",
+  "api": "0.0.1",
+  "source-url": "Write me!"
+}

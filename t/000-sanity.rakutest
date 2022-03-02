@@ -1,0 +1,5 @@
+use Test;
+
+use-ok 'Log::Dispatch', 'can use the module';
+
+done-testing;

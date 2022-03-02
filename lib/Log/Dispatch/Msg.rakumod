@@ -1,0 +1,19 @@
+unit class Log::Dispatch::Msg;
+use Log::Dispatch::Types;
+
+has Instant:D $.timestamp = now;
+has LOG-LEVEL:D $.level = NOTICE;
+has Str $.source;
+has Mu @.msg is required;
+
+method fmt-level { $.level.key.fmt: '%9s' }
+
+method fmt-timestamp { .yyyy-mm-dd ~ " " ~ .hh-mm-ss with $.timestamp.DateTime }
+
+method fmt-lines(--> Seq:D) {
+    @.msg
+        .map(*.gist)
+        .join
+        .split(/\n/)
+        .map({ self.fmt-timestamp ~ " [" ~ self.fmt-level ~ "]" ~ (" [" ~ $_ ~ "]" with $.source) ~ " " ~ $^line })
+}

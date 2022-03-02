@@ -1,0 +1,88 @@
+use Test;
+use Log::Dispatch;
+use Log::Dispatch::Source;
+use Log::Dispatch::Destination;
+
+plan 2;
+
+my @msg-obj;
+my @msg-line;
+
+my class LogDest does Log::Dispatch::Destination {
+    method report(Log::Dispatch::Msg:D $message) {
+        @msg-obj.push: $message;
+        @msg-line.append: |$message.fmt-lines;
+    }
+}
+
+my class LogSrc does Log::Dispatch::Source {
+    has Str $.lsn;
+    method log-source-name { $!lsn }
+}
+
+subtest "No Source Name" => {
+    plan 13;
+    @msg-obj = [];
+    @msg-line = [];
+    my $logger = Log::Dispatch.new;
+    my $inst = LogSrc.new;
+    $logger.add: $inst;
+    $logger.add: LogDest;
+
+    $inst.log: "1";
+    $inst.log: 2, :warning;
+    $inst.log: "pi\n", 3.14, :alert;
+
+    is +@msg-obj, 3, "all log events got through";
+    is +@msg-line, 4, "log lines";
+
+    $inst.log: "Bad boy", :debug; # Must not get through because destination max-level is NOTICE by default
+
+    is +@msg-obj, 3, "too detailed log entry is skipped";
+
+    $logger.shutdown;
+
+    nok @msg-obj[0].source.defined, "no source name is set for a message object";
+
+    isa-ok @msg-obj[0].msg[0], Str, "first message type is Str";
+    isa-ok @msg-obj[1].msg[0], Int, "second message type is Int";
+
+    is @msg-obj[2].msg.elems, 2, "multi-element message";
+    with @msg-obj[2].msg {
+        is .[0], "pi\n", "first message element";
+        is .[1], 3.14, "second message element";
+    }
+
+    like @msg-line[0], /'[     INFO] 1' $/;
+    like @msg-line[1], /'[  WARNING] 2' $/;
+    like @msg-line[2], /'[    ALERT] pi' $/;
+    like @msg-line[3], /'[    ALERT] 3.14' $/;
+}
+
+subtest "With Source Name" => {
+    plan 7;
+    @msg-obj = [];
+    @msg-line = [];
+    my $logger = Log::Dispatch.new;
+    my $inst = LogSrc.new: :lsn<MySource>;
+    $logger.add: $inst;
+    $logger.add: LogDest;
+
+    $inst.log: "1";
+    $inst.log: 2, :warning;
+    $inst.log: "pi\n", 3.14, :alert;
+
+    is +@msg-obj, 3, "all log events got through";
+    is +@msg-line, 4, "log lines";
+
+    $logger.shutdown;
+
+    is @msg-obj[0].source, "MySource", "a message object source";
+
+    like @msg-line[0], /'[     INFO] [MySource] 1' $/;
+    like @msg-line[1], /'[  WARNING] [MySource] 2' $/;
+    like @msg-line[2], /'[    ALERT] [MySource] pi' $/;
+    like @msg-line[3], /'[    ALERT] [MySource] 3.14' $/;
+}
+
+done-testing;
