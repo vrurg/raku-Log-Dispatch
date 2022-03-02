@@ -33,8 +33,10 @@ If defined then hold the source name, as in [`Log::Dispatch::Source`](Source.md)
 
 The log message, as provided with [`Log::Dispatch::Source`](Source.md) `log` method call. The list is maintained unmodified, i.e. it represents the positional arguments of the call. For example, a call like:
 
-    my $obj = Foo.new;
-    self.log: "Count: ", 42, " for object ", $obj, :debug;
+```raku
+my $obj = Foo.new;
+self.log: "Count: ", 42, " for object ", $obj, :debug;
+```
 
 would result in:
 

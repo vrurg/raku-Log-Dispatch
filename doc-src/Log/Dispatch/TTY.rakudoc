@@ -25,8 +25,10 @@ If set then it must be an opened file handle.
 If an instance of this class is created with C<:console> named argument passed into the constructor then any output
 file handle is considered a TTY and the output will be colored if C<$.color> flag is set:
 
+=begin code :lang<raku>
     my $logger = Log::Dispatch.new;
     $logger.add: 'TTY', :console, :color; # Always use ANSI colors
+=end code
 
 =head1 SEE ALSO
 

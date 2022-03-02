@@ -10,40 +10,42 @@ SYNOPSIS
 
 
 
-    use Log::Dispatch;
-    use Log::Dispatch::Destination;
-    use Log::Dispatch::Source;
+```raku
+use Log::Dispatch;
+use Log::Dispatch::Destination;
+use Log::Dispatch::Source;
 
-    class DBDestination does Log::Ddispatch::Destination {
-        method report(Log::Dispatch::Msg:D $message) {
-            ... # Implement writing log messages to a database table
+class DBDestination does Log::Ddispatch::Destination {
+    method report(Log::Dispatch::Msg:D $message) {
+        ... # Implement writing log messages to a database table
+    }
+}
+
+class MyApp does Log::Dispatch::Source {
+    has Log::Dispatch:D $!logger .= new;
+    has Str:D $.log-file is required;
+    submethod TWEAK {
+        $!logger.add: Log::Dispatch::TTY, :max-level(LOG-LEVEL::DEBUG);
+        $!logger.add: 'File', file => $!log-file;
+        $!logger.add: DBDestination;
+    }
+    method do-an-action {
+        my Bool $success;
+        my $diagnostics;
+
+        self.log: :debug, "Trying an action...";
+
+        ... # Do something
+
+        if $success {
+            self.log: "All done";
+        }
+        else {
+            self.log: :critical, "Something is wrong! Cause: ", $diagnostics;
         }
     }
-
-    class MyApp does Log::Dispatch::Source {
-        has Log::Dispatch:D $!logger .= new;
-        has Str:D $.log-file is required;
-        submethod TWEAK {
-            $!logger.add: Log::Dispatch::TTY, :max-level(LOG-LEVEL::DEBUG);
-            $!logger.add: 'File', file => $!log-file;
-            $!logger.add: DBDestination;
-        }
-        method do-an-action {
-            my Bool $success;
-            my $diagnostics;
-
-            self.log: :debug, "Trying an action...";
-
-            ... # Do something
-
-            if $success {
-                self.log: "All done";
-            }
-            else {
-                self.log: :critical, "Something is wrong! Cause: ", $diagnostics;
-            }
-        }
-    }
+}
+```
 
 DESCRIPTION
 ===========
@@ -63,9 +65,11 @@ A destination is an instance of a class consuming [`Log::Dispatch::Destination`]
 
 For example, one may have an application and wants to log its messages into a file and on the console. This is as simple as adding `does Log::Dispatch::Source` to the declaration of our application class. And by having something like the following example anywhere in application code:
 
-    my $logger = Log::Dispatch.new;
-    $logger.add: 'File', :max-level(LOG-LEVEL::DEBUG), $log-file-name;
-    $logger.add: Log::Dispatch::TTY;
+```raku
+my $logger = Log::Dispatch.new;
+$logger.add: 'File', :max-level(LOG-LEVEL::DEBUG), $log-file-name;
+$logger.add: Log::Dispatch::TTY;
+```
 
 Note that the application would then log all messages into a log file, but only the essential ones to the console.
 

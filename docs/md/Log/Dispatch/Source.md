@@ -34,18 +34,20 @@ METHODS
 
 Dispatch a new log message. The method creates a new [`Log::Dispatch::Msg`](Msg.md) object and submits it into the dispatcher. For exmaple:
 
-    class MyApp does Log::Dispatch::Source {
-        method some-action {
-            my $success;
-            ...
-            if $success {
-                self.log: "The action succeeded";
-            }
-            else {
-                self.log: "Too bad! Something went wrong", :critical;
-            }
+```raku
+class MyApp does Log::Dispatch::Source {
+    method some-action {
+        my $success;
+        ...
+        if $success {
+            self.log: "The action succeeded";
+        }
+        else {
+            self.log: "Too bad! Something went wrong", :critical;
         }
     }
+}
+```
 
 Note that multiple level named arguments can be used, but the method would throw for any unknown one and will chose the one with the most critical level among the valid ones. I.e., would it happen so that both `:critical` and `:debug` are nameds are used then `:critical` would win the duel.
 
@@ -53,7 +55,9 @@ Note that multiple level named arguments can be used, but the method would throw
 
 This method is to be defined by the consuming class if it wants to define the source name. To get a log line looking like in the example for attribute `$.name` one has to have this method as:
 
-    method log-source-name { "MySource" }
+```raku
+method log-source-name { "MySource" }
+```
 
 ### `method attach(--` Promise:D)>
 

@@ -34,8 +34,10 @@ METHODS
 
 If an instance of this class is created with `:console` named argument passed into the constructor then any output file handle is considered a TTY and the output will be colored if `$.color` flag is set:
 
+```raku
     my $logger = Log::Dispatch.new;
     $logger.add: 'TTY', :console, :color; # Always use ANSI colors
+```
 
 SEE ALSO
 ========
