@@ -1,0 +1,64 @@
+use Test;
+use Test::Output;
+use Log::Dispatch;
+use Log::Dispatch::Source;
+use Log::Dispatch::Destination;
+
+plan 2;
+
+constant THREAD-COUNT = 500;
+BEGIN $*SCHEDULER = ThreadPoolScheduler.new(:max_threads(THREAD-COUNT + 32));
+
+my @msg-obj;
+my @msg-line;
+
+my class LogDest does Log::Dispatch::Destination {
+    method report(Log::Dispatch::Msg:D $message) {
+        @msg-obj.push: $message;
+        @msg-line.append: |$message.fmt-lines;
+    }
+}
+
+my class LogSrc does Log::Dispatch::Source {
+}
+
+my $logger = Log::Dispatch.new;
+my $inst = LogSrc.new;
+$logger.add: $inst;
+$logger.add: LogDest;
+
+my $starter = Promise.new;
+my @ready;
+my @worker;
+
+for ^THREAD-COUNT -> $id {
+    @ready.push: my $ready = Promise.new;
+    @worker.push: start {
+        $ready.keep;
+        await $starter;
+        $inst.log: "THREAD ", $id;
+    }
+}
+
+await @ready;
+$starter.keep;
+await @worker;
+
+$logger.shutdown;
+
+is +@msg-obj, THREAD-COUNT, "all messages are logged";
+
+my @ids;
+
+for @msg-obj -> $msg-obj {
+    @ids[ $msg-obj.msg[1] ] = True;
+}
+
+my $all-set = True;
+for ^THREAD-COUNT -> $id {
+    $all-set &= @ids[$id];
+}
+
+ok $all-set, "all thread ID has been logged";
+
+done-testing;
