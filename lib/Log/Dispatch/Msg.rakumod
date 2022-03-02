@@ -2,7 +2,7 @@ unit class Log::Dispatch::Msg;
 use Log::Dispatch::Types;
 
 has Instant:D $.timestamp = now;
-has LOG-LEVEL:D $.level = NOTICE;
+has LOG-LEVEL:D $.level = INFO;
 has Str $.source;
 has Mu @.msg is required;
 
