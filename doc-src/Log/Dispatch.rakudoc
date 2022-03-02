@@ -3,6 +3,43 @@
 
 C<Log::Dispatch> - Dispatching multi-source, multi-destination logging
 
+=SYNOPSIS
+
+    use Log::Dispatch;
+    use Log::Dispatch::Destination;
+    use Log::Dispatch::Source;
+
+    class DBDestination does Log::Ddispatch::Destination {
+        method report(Log::Dispatch::Msg:D $message) {
+            ... # Implement writing log messages to a database table
+        }
+    }
+
+    class MyApp does Log::Dispatch::Source {
+        has Log::Dispatch:D $!logger .= new;
+        has Str:D $.log-file is required;
+        submethod TWEAK {
+            $!logger.add: Log::Dispatch::TTY, :max-level(LOG-LEVEL::DEBUG);
+            $!logger.add: 'File', file => $!log-file;
+            $!logger.add: DBDestination;
+        }
+        method do-an-action {
+            my Bool $success;
+            my $diagnostics;
+
+            self.log: :debug, "Trying an action...";
+
+            ... # Do something
+
+            if $success {
+                self.log: "All done";
+            }
+            else {
+                self.log: :critical, "Something is wrong! Cause: ", $diagnostics;
+            }
+        }
+    }
+
 =DESCRIPTION
 
 This module provide a means to have multiple log destinations withing single application with extra hassle
