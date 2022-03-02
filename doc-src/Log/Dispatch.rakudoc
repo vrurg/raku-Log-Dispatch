@@ -1,0 +1,135 @@
+=begin pod
+=NAME
+
+C<Log::Dispatch> - Dispatching multi-source, multi-destination logging
+
+=DESCRIPTION
+
+This module provide a means to have multiple log destinations withing single application with extra hassle
+but with easy support for concurrency.
+
+=head2 Model
+
+The model this module is based upon is built around a single dispatcher, which can be considered as a minimalistic
+wrapper around a L<C<Supplier>|https://docs.raku.org/type/Supplier>. The dispatcher accepts message objects from sources and dispatches them into
+destinations.
+
+A source here is any instance of a class consuming L<C<Log::Dispatch::Source>|Dispatch/Source.md> role.
+
+A destination is an instance of a class consuming L<C<Log::Dispatch::Destination>|Dispatch/Destination.md> role. It represented an endpoint
+where messages are to be submitted to.
+
+For example, one may have an application and wants to log its messages into a file and on the console. This is as simple
+as adding C<does Log::Dispatch::Source> to the declaration of our application class. And by having something like the
+following example anywhere in application code:
+
+    my $logger = Log::Dispatch.new;
+    $logger.add: 'File', :max-level(LOG-LEVEL::DEBUG), $log-file-name;
+    $logger.add: Log::Dispatch::TTY;
+
+Note that the application would then log all messages into a log file, but only the essential ones to the console.
+
+It worth to mention that each destination code is by default gets its own thread. For a source it is normally sufficient
+just to use `log` method provided by L<C<Log::Dispatch::Source>|Dispatch/Source.md> role.
+
+=head2 Processors
+
+A I<processor> is an end-point attached to the dispatcher. The module provides two kinds of processors: source and
+destination implemented, correspondingly, by L<C<Log::Dispatch::Source>|Dispatch/Source.md> and L<C<Log::Dispatch::Destination>|Dispatch/Destination.md> roles.
+
+C<Log::Dispatch::Processor> role is just an interface requiring C<attach> method to be implemented.
+
+=head2 Destinations
+
+Currently the module only provides two destination end-points: L<C<Log::Dispatch::TTY>|Dispatch/TTY.md> and
+L<C<Log::Dispatch::File>|Dispatch/File.md>. Syslog support may be added later.
+
+=head2 Performance
+
+The multi-destination concept with per-destination maximum log-level support implies that there is no way to optimize
+away some possibly unused calls to the method C<log> because any message, no matter what log-level it is assigned with,
+must be accepted and emitted into dispatcher's L<C<Supply>|https://docs.raku.org/type/Supply>.
+
+=head2 Log Levels
+
+The number and names of log levels are taken from I<syslog> standard exactly for the reason it is the most common
+logging standard existing around.
+
+Levels are provided as C<LOG-LEVEL> enum values declared by L<C<Log::Dispatch::Types>|Dispatch/Types.md> module. Here is the list in the
+ascending order:
+
+=item C<EMERGENCY>, which is I<0>
+=item C<ALERT>
+=item C<CRITICAL>
+=item C<ERROR>
+=item C<WARNING>
+=item C<NOTICE>
+=item C<INFO> – the per-destination default
+=item C<DEBUG>
+
+=head2 Non-polluting
+
+This module tries to reduce namespace pollution to the absolute minimum. The only symbol exported is C<LOG-LEVEL>
+enumeration type for comparatively simple registration of a destination, as in the above example from the
+L<Model|#Model> section.
+
+=METHODS
+
+=head3 C<multi method add(Log::Dispatch::Processor:D $processor --> Nil)>
+
+Adds an end-point object C<$processor> to the dispatcher.
+
+Note that the C<attach> method of a custom processor is expected to return a L<C<Promise>|https://docs.raku.org/type/Promise> which is to be kept only and
+only when the processor is ready. The meaning of being ready would then depend on the end-point type only.
+
+=head3 C<multi method add(Log::Dispatch::Processor:U $processor, *%params)>
+
+This method creates an instance of the C<$processor> type using C<%params> as constructor parameters. The resulting
+instance is then gets registered with the dispatcher.
+
+=head3 C<multi method add(>L<C<Str>|https://docs.raku.org/type/Str>C<:D $processor, *%params)>
+
+This method determines processor type based on the name provided in C<$processor> parameter and then instantiates it
+as described for the previous method candidate.
+
+The following rules are used to resolve the type:
+
+=item if it contains a colon pair I<::> then the name is used as-is
+=item otherwise the name is prefixed with I<Log::Dispatch::> prefix
+=item the resulting name is used to load a module of the same name with C<require>
+
+See the example in the L<Model|#Model> section above.
+
+=head3 C<shutdown>
+
+Can only be issued once on a dispatcher. Any subsequent call to the method is ignored.
+
+Closes the dispatching supply by invoking method C<done> on the L<C<Supplier>|https://docs.raku.org/type/Supplier>.
+
+The method can be invoked manually when absolutely necessary. But normally is it called inside an C<END> phaser to
+ensure that the logging capabilities are available up until the complete stop of the application.
+
+=head3 C<Supply>
+
+Produces a new supply to be tapped upon
+
+=head3 C<dispatch-msg(>L<C<Log::Dispatch::Msg>|Dispatch/Msg.md>C<:D $msg)>
+
+Emits L<C<Log::Dispatch::Msg>|Dispatch/Msg.md> object into the dispatching supply.
+
+=head1 SEE ALSO
+
+L<C<Log::Dispatch::File>|Dispatch/File.md>,
+L<C<Log::Dispatch::TTY>|Dispatch/TTY.md>,
+L<C<Log::Dispatch::Types>|Dispatch/Types.md>,
+L<C<Log::Dispatch::Source>|Dispatch/Source.md>,
+L<C<Log::Dispatch::Destination>|Dispatch/Destination.md>,
+L<C<Log::Dispatch::Msg>|Dispatch/Msg.md>
+
+=AUTHOR Vadim Belman <vrurg@cpan.org>
+
+=LICENSE
+
+Atristic 2.0
+
+=end pod

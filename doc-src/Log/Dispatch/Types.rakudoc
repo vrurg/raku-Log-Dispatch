@@ -1,0 +1,25 @@
+=begin pod
+=NAME
+
+C<Log::Dispatch::Types> - standard types used by the C<Log::Dispatch> module
+
+=DESCRIPTION
+
+Currently the only type this module provides is C<LOG-LEVEL> enumeration (exported) with the following values:
+
+=item C<EMERGENCY>, which is I<0>
+=item C<ALERT>
+=item C<CRITICAL>
+=item C<ERROR>
+=item C<WARNING>
+=item C<NOTICE>
+=item C<INFO>
+=item C<DEBUG>
+
+=head1 SEE ALSO
+
+L<C<Log::Dispatch>|../Dispatch.md>
+
+=AUTHOR Vadim Belman <vrurg@cpan.org>
+
+=end pod

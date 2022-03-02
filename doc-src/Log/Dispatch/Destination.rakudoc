@@ -1,0 +1,39 @@
+=begin pod
+=NAME
+
+C<Log::Dispatch::Destination> - role implementing destination end-point interface
+
+=DESCRIPTION
+
+This role must be consumed by any class, implementing log destination.
+
+Consumes C<Log::Dispatch::Processor>
+
+=ATTRIBUTES
+
+=head3 C<LOG-LEVEL:D $.max-level>
+
+Defines the maximum log level this destination would record. Any message with a level higher than this gets dropped.
+
+B<Default:> C<LOG-LEVEL::INFO>
+
+=METHODS
+
+=head3 C<method report(>L<C<Log::Dispatch::Msg>|Msg.md>C<:D $msg)>
+
+The only method to be implemented by a destination end-point class. Must take the C<$msg> object and translate it into
+a format, acceptable by the destination. Normally it would be as simple, as producing one or few lines using the helper
+method C<fmt-lines>, provided by L<C<Log::Dispatch::Msg>|Msg.md> class. But a destination more complicated may require more
+complicated data structure to be submitted.
+
+=head3 C<method attach($dispatcher)>
+
+Don't override unless there is a B<really> good reason.
+
+=head1 SEE ALSO
+
+L<C<Log::Dispatch>|../Dispatch.md>, L<C<Log::Dispatch::Source>|Source.md>, L<C<Log::Dispatch::Msg>|Msg.md>
+
+=AUTHOR Vadim Belman <vrurg@cpan.org>
+
+=end pod

@@ -1,0 +1,50 @@
+NAME
+====
+
+
+
+`Log::Dispatch::File` - destination end point for logging into a text file
+
+DESCRIPTION
+===========
+
+
+
+This log destination sends lines of log into a text file. The lines are formatted using standard means of [`Log::Dispatch::Msg`](Msg.md).
+
+If the destination file doesn't exists it will be created.
+
+This destination can operate in two modes: streaming or discrete. In the streaming mode the log file is opened on start and closed when the dispatcher shuts down. In the discrete mode the log file is opened and closed on per-message basis. The latter is recommended for daemons for which it is undesirable to stop them to perform log rotation as moving away the old log file before archiving is all the rotator tool has to do.
+
+ATTRIBUTES
+==========
+
+
+
+### `IO:D() $.file`
+
+Required. Log file name.
+
+### `Bool:D $.safe`
+
+A flag requesting the destination to operate in safe mode, i.e. with no write buffers. Defaults to *False*.
+
+### `Bool:D $.discrete`
+
+The flag which turns on the discrete mode of operation. Defaults to *False*.
+
+METHODS
+=======
+
+
+
+SEE ALSO
+========
+
+[`Log::Dispatch`](../Dispatch.md), [`Log::Dispatch::Source`](Source.md), [`Log::Dispatch::Destination`](Destination.md), [`Log::Dispatch::Msg`](Msg.md)
+
+AUTHOR
+======
+
+Vadim Belman <vrurg@cpan.org>
+

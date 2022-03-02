@@ -1,0 +1,40 @@
+=begin pod
+=NAME
+
+C<Log::Dispatch::TTY> - console destination with color support
+
+=DESCRIPTION
+
+This log destination sends lines of log onto the console. If the console is a TTY (i.e. not a redirection into a file or
+a pipe) then the lines of output are colored according to message levels.
+
+=ATTRIBUTES
+
+=head3 C<Bool:D $.color>
+
+If I<True> (which is the default) then the output would be colored. But only if the console is a TTY.
+
+=head3 C<IO::Handle $.tty>
+
+If set then it must be an opened file handle.
+
+=METHODS
+
+=head3 C<submethod TWEAK(Bool:D :$console)>
+
+If an instance of this class is created with C<:console> named argument passed into the constructor then any output
+file handle is considered a TTY and the output will be colored if C<$.color> flag is set:
+
+    my $logger = Log::Dispatch.new;
+    $logger.add: 'TTY', :console, :color; # Always use ANSI colors
+
+=head1 SEE ALSO
+
+L<C<Log::Dispatch>|../Dispatch.md>,
+L<C<Log::Dispatch::Source>|Source.md>,
+L<C<Log::Dispatch::Destination>|Destination.md>,
+L<C<Log::Dispatch::Msg>|Msg.md>
+
+=AUTHOR Vadim Belman <vrurg@cpan.org>
+
+=end pod
