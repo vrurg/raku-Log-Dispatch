@@ -17,9 +17,9 @@ Model
 
 The model this module is based upon is built around a single dispatcher, which can be considered as a minimalistic wrapper around a [`Supplier`](https://docs.raku.org/type/Supplier). The dispatcher accepts message objects from sources and dispatches them into destinations.
 
-A source here is any instance of a class consuming [`Log::Dispatch::Source`](Dispatch/Source.md) role.
+A source here is any instance of a class consuming [`Log::Dispatch::Source`](docs/md/Log/Dispatch/Source.md) role.
 
-A destination is an instance of a class consuming [`Log::Dispatch::Destination`](Dispatch/Destination.md) role. It represented an endpoint where messages are to be submitted to.
+A destination is an instance of a class consuming [`Log::Dispatch::Destination`](docs/md/Log/Dispatch/Destination.md) role. It represented an endpoint where messages are to be submitted to.
 
 For example, one may have an application and wants to log its messages into a file and on the console. This is as simple as adding `does Log::Dispatch::Source` to the declaration of our application class. And by having something like the following example anywhere in application code:
 
@@ -29,19 +29,19 @@ For example, one may have an application and wants to log its messages into a fi
 
 Note that the application would then log all messages into a log file, but only the essential ones to the console.
 
-It worth to mention that each destination code is by default gets its own thread. For a source it is normally sufficient just to use `log` method provided by [`Log::Dispatch::Source`](Dispatch/Source.md) role.
+It worth to mention that each destination code is by default gets its own thread. For a source it is normally sufficient just to use `log` method provided by [`Log::Dispatch::Source`](docs/md/Log/Dispatch/Source.md) role.
 
 Processors
 ----------
 
-A *processor* is an end-point attached to the dispatcher. The module provides two kinds of processors: source and destination implemented, correspondingly, by [`Log::Dispatch::Source`](Dispatch/Source.md) and [`Log::Dispatch::Destination`](Dispatch/Destination.md) roles.
+A *processor* is an end-point attached to the dispatcher. The module provides two kinds of processors: source and destination implemented, correspondingly, by [`Log::Dispatch::Source`](docs/md/Log/Dispatch/Source.md) and [`Log::Dispatch::Destination`](docs/md/Log/Dispatch/Destination.md) roles.
 
 `Log::Dispatch::Processor` role is just an interface requiring `attach` method to be implemented.
 
 Destinations
 ------------
 
-Currently the module only provides two destination end-points: [`Log::Dispatch::TTY`](Dispatch/TTY.md) and [`Log::Dispatch::File`](Dispatch/File.md). Syslog support may be added later.
+Currently the module only provides two destination end-points: [`Log::Dispatch::TTY`](docs/md/Log/Dispatch/TTY.md) and [`Log::Dispatch::File`](docs/md/Log/Dispatch/File.md). Syslog support may be added later.
 
 Performance
 -----------
@@ -53,7 +53,7 @@ Log Levels
 
 The number and names of log levels are taken from *syslog* standard exactly for the reason it is the most common logging standard existing around.
 
-Levels are provided as `LOG-LEVEL` enum values declared by [`Log::Dispatch::Types`](Dispatch/Types.md) module. Here is the list in the ascending order:
+Levels are provided as `LOG-LEVEL` enum values declared by [`Log::Dispatch::Types`](docs/md/Log/Dispatch/Types.md) module. Here is the list in the ascending order:
 
   * `EMERGENCY`, which is *0*
 
@@ -117,14 +117,14 @@ The method can be invoked manually when absolutely necessary. But normally is it
 
 Produces a new supply to be tapped upon
 
-### `dispatch-msg(`[`Log::Dispatch::Msg`](Dispatch/Msg.md)`:D $msg)`
+### `dispatch-msg(`[`Log::Dispatch::Msg:D`](docs/md/Log/Dispatch/Msg.md)`$msg)`
 
-Emits [`Log::Dispatch::Msg`](Dispatch/Msg.md) object into the dispatching supply.
+Emits [`Log::Dispatch::Msg`](docs/md/Log/Dispatch/Msg.md) object into the dispatching supply.
 
 SEE ALSO
 ========
 
-[`Log::Dispatch::File`](Dispatch/File.md), [`Log::Dispatch::TTY`](Dispatch/TTY.md), [`Log::Dispatch::Types`](Dispatch/Types.md), [`Log::Dispatch::Source`](Dispatch/Source.md), [`Log::Dispatch::Destination`](Dispatch/Destination.md), [`Log::Dispatch::Msg`](Dispatch/Msg.md)
+[`Log::Dispatch::File`](docs/md/Log/Dispatch/File.md), [`Log::Dispatch::TTY`](docs/md/Log/Dispatch/TTY.md), [`Log::Dispatch::Types`](docs/md/Log/Dispatch/Types.md), [`Log::Dispatch::Source`](docs/md/Log/Dispatch/Source.md), [`Log::Dispatch::Destination`](docs/md/Log/Dispatch/Destination.md), [`Log::Dispatch::Msg`](docs/md/Log/Dispatch/Msg.md)
 
 AUTHOR
 ======
