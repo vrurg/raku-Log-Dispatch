@@ -45,11 +45,12 @@ class Log::Dispatch:ver($?DISTRIBUTION.meta<ver>):auth($?DISTRIBUTION.meta<auth>
     method Supply {
         $!pipeline.Supply
     }
+
+    our sub META6 { $?DISTRIBUTION.meta }
 }
 
 sub EXPORT {
     Map.new:
-        'Log::Dispatch' => Log::Dispatch,
         'LOG-LEVEL' => Log::Dispatch::Types::LOG-LEVEL,
 }
 
