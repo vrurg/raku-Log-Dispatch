@@ -27,7 +27,7 @@ Message level provided with [`Log::Dispatch::Source`](Source.md) `log` method ca
 
 ### `Str $.source`
 
-If defined then hold the source name, as in [`Log::Dispatch::Source`](Source.md) `$.LSN` attribute.
+If defined then holds the source name, as in [`Log::Dispatch::Source`](Source.md) `$.LSN` attribute.
 
 ### `Mu @.msg`
 
