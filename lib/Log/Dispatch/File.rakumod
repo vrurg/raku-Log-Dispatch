@@ -24,13 +24,13 @@ method report(Log::Dispatch::Msg:D $message) {
     $!lh-lock.protect: {
         if $!discrete {
             with self!get-fh {
-                .print: $message.fmt-lines.map({ $_ ~ "\n" });
+                .print: |$message.fmt-lines.map({ $_ ~ "\n" });
                 .close;
             }
         }
         else {
             Log::Dispatch::X::LogClosed.new(processor => self).throw unless $!log-h;
-            $!log-h.print: $message.fmt-lines.map({ $_ ~ "\n" });
+            $!log-h.print: |$message.fmt-lines.map({ $_ ~ "\n" });
         }
     }
 }

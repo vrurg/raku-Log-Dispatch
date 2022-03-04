@@ -20,13 +20,16 @@ $logger.add: 'File', :file($tmp-log);
 $logger.add: $inst;
 
 $inst.log: "Line 1";
-$inst.log: "Line 2", :warning;
+$inst.log: "Line 2\nLine 3", :warning;
 
 $logger.shutdown;
 
 like
     $tmp-log.slurp,
-    /^^ <date-time> ' [     INFO] [FileTest] Line 1' \n <date-time> ' [  WARNING] [FileTest] Line 2' \n $/,
+    /^ <date-time> ' [     INFO] [FileTest] Line 1' \n
+       <date-time> ' [  WARNING] [FileTest] Line 2' \n
+       <date-time> ' [  WARNING] [FileTest] Line 3' \n
+    $/,
     "log content";
 
 unlink $tmp-log;
