@@ -11,7 +11,7 @@ Consumes C<Log::Dispatch::Processor>.
 
 =ATTRIBUTES
 
-=head3 C<Str $.name>
+=head3 C<Str $.LSN>
 
 If set provides source name. In a log file line it would be represented in square brackets sitting next to the message
 level. Something like:
@@ -47,7 +47,7 @@ nameds are used then `:critical` would win the duel.
 =head3 C<method log-source-name()>
 
 This method is to be defined by the consuming class if it wants to define the source name. To get a log line looking
-like in the example for attribute C<$.name> one has to have this method as:
+like in the example for attribute C<$.LSN> one has to have this method as:
 
 =for code :lang<raku>
 method log-source-name { "MySource" }

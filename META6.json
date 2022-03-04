@@ -27,7 +27,7 @@
   },
   "resources": [],
   "license": "Artistic-2.0",
-  "api": "0.0.1",
+  "api": "0.0.2",
   "source-url": "https://github.com/vrurg/raku-Log-Dispatch.git",
   "raku": "6.*"
 }

@@ -19,7 +19,7 @@ ATTRIBUTES
 
 
 
-### `Str $.name`
+### `Str $.LSN`
 
 If set provides source name. In a log file line it would be represented in square brackets sitting next to the message level. Something like:
 
@@ -53,7 +53,7 @@ Note that multiple level named arguments can be used, but the method would throw
 
 ### `method log-source-name()`
 
-This method is to be defined by the consuming class if it wants to define the source name. To get a log line looking like in the example for attribute `$.name` one has to have this method as:
+This method is to be defined by the consuming class if it wants to define the source name. To get a log line looking like in the example for attribute `$.LSN` one has to have this method as:
 
 ```raku
 method log-source-name { "MySource" }

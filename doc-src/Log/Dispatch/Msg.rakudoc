@@ -19,7 +19,7 @@ Message level provided with L<C<Log::Dispatch::Source>|Source.md> C<log> method 
 
 =head3 C<Str $.source>
 
-If defined then hold the source name, as in L<C<Log::Dispatch::Source>|Source.md> C<$.name> attribute.
+If defined then holds the source name, as in L<C<Log::Dispatch::Source>|Source.md> C<$.LSN> attribute.
 
 =head3 C<Mu @.msg>
 

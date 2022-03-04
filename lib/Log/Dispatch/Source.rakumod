@@ -7,7 +7,7 @@ use Log::Dispatch::X;
 
 also does Log::Dispatch::Processor;
 
-has Str $.name = self.log-source-name;
+has Str $.LSN = self.log-source-name;
 has Log::Dispatch $!dispatcher;
 
 method log-source-name(--> Nil) {}
@@ -23,5 +23,5 @@ method log(+@msg, *%level) {
         .sort({ $^a <=> $^b })
         .head // INFO;
 
-    $!dispatcher.dispatch-msg: Log::Dispatch::Msg.new(:$level, :@msg, :source($.name));
+    $!dispatcher.dispatch-msg: Log::Dispatch::Msg.new(:$level, :@msg, :source($.LSN));
 }
