@@ -20,45 +20,71 @@ my class LogDest does Log::Dispatch::Destination {
 }
 
 my class LogSrc does Log::Dispatch::Source {
+    method log-source-name { "MultiThr" }
 }
 
-my $logger = Log::Dispatch.new;
-my $inst = LogSrc.new;
-$logger.add: $inst;
-$logger.add: LogDest;
+subtest "Concurrent logging" => {
+    plan 2;
+    my $logger = Log::Dispatch.new;
+    my $inst = LogSrc.new;
+    $logger.add: $inst;
+    $logger.add: LogDest;
 
-my $starter = Promise.new;
-my @ready;
-my @worker;
+    my $starter = Promise.new;
+    my @ready;
+    my @worker;
 
-for ^THREAD-COUNT -> $id {
-    @ready.push: my $ready = Promise.new;
-    @worker.push: start {
-        $ready.keep;
-        await $starter;
-        $inst.log: "THREAD ", $id;
+    for ^THREAD-COUNT -> $id {
+        @ready.push: my $ready = Promise.new;
+        @worker.push: start {
+            $ready.keep;
+            await $starter;
+            $inst.log: "THREAD ", $id;
+        }
     }
+
+    await @ready;
+    $starter.keep;
+    await @worker;
+
+    $logger.shutdown;
+
+    is +@msg-obj, THREAD-COUNT, "all messages are logged";
+
+    my %ids;
+
+    for @msg-obj -> $msg-obj {
+        %ids{$msg-obj.msg} = True;
+    }
+
+    my $all-set = True;
+    for ^THREAD-COUNT -> $id {
+        $all-set &= %ids{"THREAD " ~ $id};
+    }
+
+    ok $all-set, "all thread ID has been logged";
 }
 
-await @ready;
-$starter.keep;
-await @worker;
+subtest "Thread ID in output" => {
+    my $logger = Log::Dispatch.new;
+    my $inst = LogSrc.new;
+    $logger.add: $inst;
+    $logger.add: LogDest;
+    @msg-obj = ();
+    @msg-line = ();
 
-$logger.shutdown;
+    my $id-str = ~$*THREAD.id;
 
-is +@msg-obj, THREAD-COUNT, "all messages are logged";
+    $inst.log: "No ID";
 
-my %ids;
+    $inst.use-thread-id;
 
-for @msg-obj -> $msg-obj {
-    %ids{ $msg-obj.msg } = True;
+    $inst.log: "WITH THREAD ID";
+
+    $logger.shutdown;
+
+    like @msg-line[0], /'[MultiThr] No ID'/, "no thread ID by default";
+    like @msg-line[1], /'[MultiThr:' \s+ $id-str '] WITH THREAD ID'/, "thread ID is included when requested";
 }
-
-my $all-set = True;
-for ^THREAD-COUNT -> $id {
-    $all-set &= %ids{"THREAD " ~ $id};
-}
-
-ok $all-set, "all thread ID has been logged";
 
 done-testing;
