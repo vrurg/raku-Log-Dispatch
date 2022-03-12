@@ -23,5 +23,7 @@ method log(+@msg, *%level) {
         .sort({ $^a <=> $^b })
         .head // INFO;
 
-    $!dispatcher.dispatch-msg: Log::Dispatch::Msg.new(:$level, :@msg, :source($.LSN));
+    my Str:D $msg = @msg.map(*.gist).join;
+
+    $!dispatcher.dispatch-msg: Log::Dispatch::Msg.new(:$level, :$msg, :source($.LSN));
 }

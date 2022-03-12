@@ -48,15 +48,15 @@ $logger.shutdown;
 
 is +@msg-obj, THREAD-COUNT, "all messages are logged";
 
-my @ids;
+my %ids;
 
 for @msg-obj -> $msg-obj {
-    @ids[ $msg-obj.msg[1] ] = True;
+    %ids{ $msg-obj.msg } = True;
 }
 
 my $all-set = True;
 for ^THREAD-COUNT -> $id {
-    $all-set &= @ids[$id];
+    $all-set &= %ids{"THREAD " ~ $id};
 }
 
 ok $all-set, "all thread ID has been logged";

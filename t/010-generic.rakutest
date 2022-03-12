@@ -21,7 +21,7 @@ my class LogSrc does Log::Dispatch::Source {
 }
 
 subtest "No Source Name" => {
-    plan 13;
+    plan 12;
     @msg-obj = [];
     @msg-line = [];
     my $logger = Log::Dispatch.new;
@@ -44,14 +44,10 @@ subtest "No Source Name" => {
 
     nok @msg-obj[0].source.defined, "no source name is set for a message object";
 
-    isa-ok @msg-obj[0].msg[0], Str, "first message type is Str";
-    isa-ok @msg-obj[1].msg[0], Int, "second message type is Int";
-
-    is @msg-obj[2].msg.elems, 2, "multi-element message";
-    with @msg-obj[2].msg {
-        is .[0], "pi\n", "first message element";
-        is .[1], 3.14, "second message element";
-    }
+    isa-ok @msg-obj[0].msg, Str:D, "message type is Str";
+    is @msg-obj[0].msg, "1", "message content 1";
+    is @msg-obj[1].msg, "2", "message content 2";
+    is @msg-obj[2].msg, "pi\n3.14", "message content 3";
 
     like @msg-line[0], /'[     INFO] 1' $/;
     like @msg-line[1], /'[  WARNING] 2' $/;
