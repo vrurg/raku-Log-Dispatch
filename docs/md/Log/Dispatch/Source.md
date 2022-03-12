@@ -49,7 +49,7 @@ class MyApp does Log::Dispatch::Source {
 }
 ```
 
-Note that multiple level named arguments can be used, but the method would throw for any unknown one and will chose the one with the most critical level among the valid ones. I.e., would it happen so that both `:critical` and `:debug` are nameds are used then `:critical` would win the duel.
+Note that multiple level named arguments can be used, but the method would throw for any unknown one and will chose the one with the most critical level among the valid ones. I.e., would it happen so that both `:critical` and `:debug` nameds are used then `:critical` would win the duel.
 
 ### `method log-source-name()`
 
@@ -62,6 +62,12 @@ method log-source-name { "MySource" }
 ### `method attach(--` Promise:D)>
 
 Must never be used and better be not overriden without a **really** good reaon.
+
+### `method use-thread-id(Bool:D $on = True)`
+
+This method allows to raise/drop a flag to include `$*THREAD.id` into the log file. This can sometimes help when multi-threaded application is debugged and log lines from different threads can be intermixed.
+
+**Note** though that this information is unreliable as `await`-ing for something can result in a continuation to be re-scheduled on a different thread.
 
 SEE ALSO
 ========
