@@ -1,7 +1,7 @@
 {
   "name": "Log::Dispatch",
   "description": "Multi-source, multi-destination log dispatcher",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "perl": "6.*",
   "authors": [
     "Vadim Belman"
@@ -27,7 +27,7 @@
   },
   "resources": [],
   "license": "Artistic-2.0",
-  "api": "0.0.2",
+  "api": "0.0.3",
   "source-url": "https://github.com/vrurg/raku-Log-Dispatch.git",
   "raku": "6.*"
 }
