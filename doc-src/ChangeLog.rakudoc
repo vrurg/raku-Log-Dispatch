@@ -1,12 +1,21 @@
 =begin pod
 =CHANGELOG
 
+=head2 v0.0.4
+
+=item Include thread ID into log if requested
+=item Fix a potential race
+
+=head2 v0.0.3
+
+=item Renamed C<$.name> to C<$.LSN> in C<Log::Dispatch::Source>
+
 =head2 v0.0.2
 
-Fixed an extra whitespace in multi-line messages sent to C<File> destination.
+=item Fixed an extra whitespace in multi-line messages sent to C<File> destination
 
 =head2 v0.0.1
 
-Initial release
+=item Initial release
 
 =end pod
