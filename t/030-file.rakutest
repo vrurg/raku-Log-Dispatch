@@ -7,7 +7,10 @@ plan 1;
 
 my $tmp-log = $*TMPDIR.add( 'log-dispatch-' ~ $*PID ~ "-" ~ rand );
 
-my regex date-time { \d**4 '-' \d**2 '-' \d**2 ' ' \d**2 ':' \d**2 ':' \d**2 };
+my regex date-time {
+    \d**4 '-' \d**2 '-' \d**2 ' '
+    \d**2 ':' \d**2 ':' \d**2 <[+-]> \d**4
+};
 
 my class LogSrc does Log::Dispatch::Source {
     method log-source-name { "FileTest" }
