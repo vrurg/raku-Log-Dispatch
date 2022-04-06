@@ -17,7 +17,7 @@ ATTRIBUTES
 
 
 
-### [`Instant`](https://docs.raku.org/type/Instant)`:D $.timestamp`
+### [`DateTime:D`](https://docs.raku.org/type/DateTime)`:D $.timestamp`
 
 The moment when message object has been produced
 

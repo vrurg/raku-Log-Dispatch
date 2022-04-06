@@ -1,6 +1,10 @@
 =begin pod
 =CHANGELOG
 
+=head2 v0.0.5
+
+=item Respect timezones, make C<$.timestamp> of C<Log::Dispatch::Msg> a L<C<DateTime>|https://docs.raku.org/type/DateTime> instance
+
 =head2 v0.0.4
 
 =item Include thread ID into log if requested

@@ -9,7 +9,7 @@ This class represents a data structure holding information about a log entry.
 
 =ATTRIBUTES
 
-=head3 L<C<Instant>|https://docs.raku.org/type/Instant>C<:D $.timestamp>
+=head3 L<C<DateTime:D>|https://docs.raku.org/type/DateTime>C<:D $.timestamp>
 
 The moment when message object has been produced
 
