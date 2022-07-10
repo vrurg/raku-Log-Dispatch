@@ -73,7 +73,7 @@ subtest "Thread ID in output" => {
     @msg-obj = ();
     @msg-line = ();
 
-    my $id-str = ~$*THREAD.id;
+    my $id-str = ~($*RAKU.compiler.version >= v2022.06 ?? $*STACK-ID !! $*THREAD.id);
 
     $inst.log: "No ID";
 
