@@ -21,11 +21,14 @@ my class LogSrc does Log::Dispatch::Source {
 }
 
 subtest "No Source Name" => {
-    plan 13;
+    plan 14;
     @msg-obj = [];
     @msg-line = [];
     my $logger = Log::Dispatch.new;
     my $inst = LogSrc.new;
+
+    nok $inst.attached, "log source is not attached yet";
+
     $logger.add: $inst;
     $logger.add: LogDest;
 
