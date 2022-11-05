@@ -56,6 +56,10 @@ method log-source-name { "MySource" }
 
 Must never be used and better be not overriden without a B<really> good reaon.
 
+=head3 C<method attached(--> Bool:D)>
+
+Returns I<True> if this source is already attached to a dispatcher.
+
 =head3 C<method use-thread-id(Bool:D $on = True)>
 
 This method allows to raise/drop a flag to include C<$*THREAD.id> into the log file. This can sometimes help when

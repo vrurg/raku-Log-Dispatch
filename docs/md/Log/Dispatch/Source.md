@@ -63,6 +63,10 @@ method log-source-name { "MySource" }
 
 Must never be used and better be not overriden without a **really** good reaon.
 
+### `method attached(--` Bool:D)>
+
+Returns *True* if this source is already attached to a dispatcher.
+
 ### `method use-thread-id(Bool:D $on = True)`
 
 This method allows to raise/drop a flag to include `$*THREAD.id` into the log file. This can sometimes help when multi-threaded application is debugged and log lines from different threads can be intermixed.

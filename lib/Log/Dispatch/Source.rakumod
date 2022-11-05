@@ -18,6 +18,8 @@ method log-source-name(--> Nil) {}
 
 method attach($!dispatcher) { Promise.kept }
 
+method attached(--> Bool:D) { (⚛$!dispatcher).defined }
+
 method use-thread-id(Bool:D $on = True) { $!with-thread-id = $on }
 
 method log(+@msg, *%level) {
