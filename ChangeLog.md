@@ -3,6 +3,13 @@ CHANGELOG
 
 
 
+head
+====
+
+v0.0.8
+
+  * Added `attached` method to `Log::Dispatch::Source`
+
 v0.0.5
 ------
 
